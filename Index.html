@@ -36,11 +36,9 @@
   .mono{font-family:var(--fm);font-variant-numeric:tabular-nums}
   mark{background:#fecaca;color:inherit;border-radius:3px;padding:0 2px}
 
-  /* Animasi Loading Spin */
   @keyframes spin { 100% { transform: rotate(360deg); } }
   .spin { animation: spin 1s linear infinite; }
 
-  /* ===== tombol ===== */
   .btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:13.5px;
     padding:10px 16px;border-radius:10px;transition:.18s;white-space:nowrap}
   .btn svg.lucide{width:16px;height:16px}
@@ -54,12 +52,9 @@
   .btn-text{color:var(--muted);font-weight:600;font-size:13px;padding:8px 10px;border-radius:8px}
   .btn-text:hover{background:var(--line-2);color:var(--text)}
   .btn:disabled{opacity:.65;cursor:wait;pointer-events:none}
-
-  /* ===== badge ===== */
   .chip{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;
     color:var(--slate);background:var(--slate-bg);padding:4px 10px;border-radius:999px}
 
-  /* ================= LOGIN ================= */
   #viewLogin{min-height:100vh;display:grid;place-items:center;padding:24px}
   .l-card{width:100%;max-width:400px;animation:fadeUp .5s both}
   .l-logo{display:flex;align-items:center;gap:12px;margin-bottom:24px}
@@ -67,70 +62,19 @@
   .l-logo .mark img{width:100%;height:100%;object-fit:contain}
   .l-logo b{font-size:18px;font-weight:800;letter-spacing:-.02em;display:block;color:var(--text)}
   .l-logo span{font-size:13px;color:var(--muted)}
-  
   .l-card h2{font-size:24px;font-weight:700;letter-spacing:-.02em}
   .l-card .sub{color:var(--muted);margin-top:6px;font-size:14px;margin-bottom:20px}
   @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 
   .field { margin-top: 18px; width: 100%; }
-  .field label {
-    display: block;
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text);
-    margin-bottom: 8px;
-  }
-  .inwrap {
-    position: relative;
-    width: 100%;
-  }
-  .inwrap > svg.lucide {
-    position: absolute;
-    left: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 18px;
-    height: 18px;
-    color: var(--muted);
-    pointer-events: none;
-  }
-  .inwrap input {
-    width: 100%;
-    height: 44px;
-    padding: 0 16px 0 42px;
-    border: 1.5px solid var(--line);
-    border-radius: 12px;
-    background: var(--surface);
-    color: var(--text);
-    font-size: 14px;
-    transition: all 0.2s ease;
-    box-sizing: border-box;
-  }
-  .inwrap input::placeholder {
-    color: var(--faint);
-    font-weight: 400;
-  }
-  .inwrap input:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(185, 28, 28, 0.12);
-  }
-  .eye {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    padding: 6px;
-    color: var(--muted);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-  }
-  .eye:hover {
-    color: var(--text);
-    background: var(--line-2);
-  }
-
+  .field label { display: block; font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 8px; }
+  .inwrap { position: relative; width: 100%; }
+  .inwrap > svg.lucide { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--muted); pointer-events: none; }
+  .inwrap input { width: 100%; height: 44px; padding: 0 16px 0 42px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--text); font-size: 14px; transition: all 0.2s ease; box-sizing: border-box; }
+  .inwrap input::placeholder { color: var(--faint); font-weight: 400; }
+  .inwrap input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(185, 28, 28, 0.12); }
+  .eye { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); padding: 6px; color: var(--muted); border-radius: 8px; display: flex; align-items: center; }
+  .eye:hover { color: var(--text); background: var(--line-2); }
   .row-between{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
   .check{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);cursor:pointer;user-select:none}
   .check input{accent-color:var(--primary);width:15px;height:15px}
@@ -142,7 +86,6 @@
   .shake{animation:shake .45s}
   @keyframes shake{0%,100%{transform:none}20%{transform:translateX(-8px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(3px)}}
 
-  /* ================= APP SHELL ================= */
   #viewApp{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
   .sb{background:var(--surface);border-right:1px solid var(--line);padding:20px 14px;
     display:flex;flex-direction:column;gap:4px;position:sticky;top:0;height:100vh;z-index:40}
@@ -212,7 +155,6 @@
   .page-head h1{font-size:24px;font-weight:700;letter-spacing:-.025em}
   .page-head p{color:var(--muted);margin-top:5px;font-size:13.5px}
 
-  /* ===== kartu ===== */
   .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
     box-shadow:var(--shadow-sm)}
   .stats{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:20px}
@@ -241,7 +183,6 @@
   .link:hover{color:var(--primary-dk);text-decoration:underline}
   .link svg.lucide{width:14px;height:14px}
 
-  /* chart aktivitas */
   .bars{display:flex;align-items:flex-end;gap:10px;height:150px;padding-top:8px}
   .bars .b{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end}
   .bars .fill{width:100%;max-width:34px;border-radius:8px;background:var(--primary-tint);
@@ -257,7 +198,6 @@
   .cat .fl{height:100%;border-radius:99px;background:var(--primary);width:0;transition:width .8s cubic-bezier(.2,.8,.2,1)}
   .cat .v{font-size:12px;font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
 
-  /* ===== tabel ===== */
   .tbl-card{overflow:hidden}
   .tbl-scroll{overflow-x:auto}
   table{width:100%;border-collapse:collapse;min-width:760px}
@@ -306,7 +246,6 @@
   .empty p{color:var(--muted);font-size:13px;margin-top:5px}
   .empty .btn{margin-top:18px}
 
-  /* ===== toolbar halaman data ===== */
   .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
   .toolbar .top-search{width:300px;flex:1;min-width:220px}
   .select{position:relative}
@@ -318,15 +257,8 @@
     border-right:2px solid var(--faint);border-bottom:2px solid var(--faint);
     transform:translateY(-70%) rotate(45deg);pointer-events:none}
 
-  /* ===== settings ===== */
   .set-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
-  .set-row{display:flex;align-items:center;justify-content:space-between;gap:14px;
-    padding:16px 0;border-bottom:1px solid var(--line-2)}
-  .set-row:last-child{border-bottom:none;padding-bottom:4px}
-  .set-row .t b{display:block;font-size:13.5px;font-weight:700}
-  .set-row .t span{display:block;font-size:12.5px;color:var(--muted);margin-top:3px;max-width:340px;line-height:1.5}
 
-  /* ================= MODAL ================= */
   .overlay{position:fixed;inset:0;background:rgba(15,23,42,.5);backdrop-filter:blur(2px);
     z-index:80;opacity:0;pointer-events:none;transition:opacity .25s}
   .overlay.show{opacity:1;pointer-events:auto}
@@ -357,26 +289,13 @@
     background-size:16px;
     cursor:pointer;
   }
-  .inwrap.plain input[type="file"] {
-    padding: 8px 14px;
-    height: auto;
-    cursor: pointer;
-  }
+  .inwrap.plain input[type="file"] { padding: 8px 14px; height: auto; cursor: pointer; }
   .inwrap.plain input[type="file"]::file-selector-button {
-    background: var(--line-2);
-    border: 1px solid var(--line);
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 13px;
-    color: var(--text);
-    cursor: pointer;
-    margin-right: 12px;
-    transition: background 0.2s;
+    background: var(--line-2); border: 1px solid var(--line); padding: 6px 12px;
+    border-radius: 8px; font-weight: 600; font-size: 13px; color: var(--text);
+    cursor: pointer; margin-right: 12px; transition: background 0.2s;
   }
-  .inwrap.plain input[type="file"]::file-selector-button:hover {
-    background: var(--line);
-  }
+  .inwrap.plain input[type="file"]::file-selector-button:hover { background: var(--line); }
   textarea.ta{min-height:84px;height:auto;resize:vertical;padding:11px 14px}
   .inwrap.plain input:focus,.inwrap.plain select:focus,textarea.ta:focus{outline:none;border-color:var(--primary);
     box-shadow:0 0 0 3px rgba(185,28,28,.12)}
@@ -387,7 +306,6 @@
   .m-foot{display:flex;justify-content:flex-end;gap:10px;padding:16px 24px 22px;border-top:1px solid var(--line-2)}
   .m-foot .btn-primary{min-width:150px;justify-content:center}
 
-  /* detail */
   .d-top{display:flex;align-items:center;gap:14px;margin-bottom:14px}
   .d-top .av{width:48px;height:48px;border-radius:13px;font-size:14px}
   .d-title{font-size:16px;font-weight:700;letter-spacing:-.01em;line-height:1.35}
@@ -401,7 +319,6 @@
   .warn p{font-size:13px;line-height:1.6;color:#991b1b;font-weight:400}
   .target{border:1px solid var(--line);border-radius:12px;padding:13px 15px;margin-top:14px;display:flex;align-items:center;gap:12px}
 
-  /* ===== toast ===== */
   .toasts{position:fixed;bottom:20px;right:20px;z-index:150;display:flex;flex-direction:column;gap:10px;max-width:min(380px,calc(100vw - 40px))}
   .toast{display:flex;align-items:flex-start;gap:11px;background:var(--dark);color:#fff;
     padding:13px 16px;border-radius:13px;box-shadow:var(--shadow-lg);font-size:13px;font-weight:400;
@@ -419,7 +336,6 @@
   tr.row-new{animation:newRow 2.2s both}
   @keyframes newRow{0%{background:var(--primary-tint)}100%{background:transparent}}
 
-  /* ================= RESPONSIF ================= */
   @media(max-width:1200px){
     .stats{grid-template-columns:repeat(3,1fr)}
     .grid-2{grid-template-columns:1fr}
@@ -655,7 +571,7 @@
           <div>
             <div class="crumb">Beranda / Pengaturan</div>
             <h1>Pengaturan</h1>
-            <p>Kelola profil, keamanan, dan pengaturan sistem.</p>
+            <p>Kelola profil dan keamanan aplikasi.</p>
           </div>
         </div>
         <div class="set-grid">
@@ -687,15 +603,6 @@
                 </div>
               </div>
               <button class="btn btn-primary" id="btnSavePass" style="margin-top:16px"><i data-lucide="key-round"></i>Ubah Sandi</button>
-            </div>
-          </div>
-          <div class="card" style="grid-column:1/-1">
-            <div class="card-h"><div><h3>Data & Pemeliharaan</h3><p>Tindakan administrator untuk data arsip</p></div></div>
-            <div class="card-b" style="padding-top:6px">
-              <div class="set-row">
-                <div class="t"><b>Kosongkan Register (Wipe Data)</b><span>Hapus permanen seluruh catatan arsip dari database backend. Tindakan ini tidak dapat dibatalkan.</span></div>
-                <button class="btn btn-danger" id="btnWipe"><i data-lucide="trash-2"></i>Kosongkan</button>
-              </div>
             </div>
           </div>
         </div>
@@ -963,8 +870,9 @@ document.addEventListener('click', e => { if(!e.target.closest('#userMenu') && !
 function closeMenu(){ $('#userMenu').classList.remove('open'); }
 
 $('#globalSearch').addEventListener('input', e => {
-  state.query = e.target.value; state.page = 1;
+  state.query = e.target.value;
   $('#q').value = state.query;
+  state.page = 1;
   if(state.view !== 'data') showView('data');
   renderTable();
 });
@@ -1083,7 +991,7 @@ function openDetail(id){
   $('#dAva').textContent = initials(r.judul);
   $('#dJudul').textContent = r.judul;
   $('#dKategori').textContent = r.kategori;
-  $('#dTanggal').textContent = fmtDate(new Date(r.tanggal+'T00:00:00'));
+  $('#dTanggal').textContent = fmtDate(new Date(r.tanggal));
   $('#dDaftar').textContent = fmtDate(new Date(r.createdAt));
   $('#dKet').textContent = r.ket || 'Tidak ada keterangan.';
   
@@ -1094,7 +1002,6 @@ function openDetail(id){
   } else {
     $('#dFileWrapper').style.display = 'none';
   }
-
   openModal('#mDetail');
 }
 $('#dEdit').addEventListener('click', () => { const id = state.detailId; closeModals(); setTimeout(()=>openForm(id), 200); });
@@ -1166,7 +1073,7 @@ function renderRecent(){
       <td><div class="cell-doc"><span class="avatar av" style="${avStyle(r.kategori)}">${initials(r.judul)}</span>
         <div><b>${esc(r.judul)}</b><span>${esc(r.ket || '-')}</span></div></div></td>
       <td><span class="chip">${esc(r.kategori)}</span></td>
-      <td class="cell-muted">${esc(fmtDate(new Date(r.tanggal+'T00:00:00')))}</td>
+      <td class="cell-muted">${esc(fmtDate(new Date(r.tanggal)))}</td>
       <td class="c-act"><button class="icon-btn" data-act="view" title="Detail"><i data-lucide="eye"></i></button></td>
     </tr>`).join('')
     : `<tr><td colspan="4"><div class="empty"><div class="ico"><i data-lucide="inbox"></i></div>
@@ -1204,7 +1111,7 @@ function renderTable(){
         <td><div class="cell-doc"><span class="avatar av" style="${avStyle(r.kategori)}">${initials(r.judul)}</span>
           <div><b>${hl(esc(r.judul), q)}</b><span>${hl(esc(r.ket || '-'), q)}</span></div></div></td>
         <td><span class="chip">${hl(esc(r.kategori), q)}</span></td>
-        <td class="cell-muted">${esc(fmtDate(new Date(r.tanggal+'T00:00:00')))}</td>
+        <td class="cell-muted">${esc(fmtDate(new Date(r.tanggal)))}</td>
         <td class="c-act">
           <button class="icon-btn" data-act="view" title="Detail"><i data-lucide="eye"></i></button>
           <button class="icon-btn" data-act="edit" title="Ubah"><i data-lucide="pencil"></i></button>
@@ -1246,7 +1153,15 @@ $('#thead').addEventListener('click', e => {
   else { state.sortKey = k; state.sortDir = 'asc'; }
   renderTable();
 });
-$('#q').addEventListener('input', e => { state.query = e.target.value; state.page = 1; renderTable(); });
+
+// Perbaikan Sinkronisasi Pencarian Dua Arah
+$('#q').addEventListener('input', e => { 
+  state.query = e.target.value; 
+  $('#globalSearch').value = state.query; 
+  state.page = 1; 
+  renderTable(); 
+});
+
 $('#fCat').addEventListener('change', e => { state.cat = e.target.value; state.page = 1; renderTable(); });
 $('#pPrev').addEventListener('click', () => { if(state.page > 1){ state.page--; renderTable(); }});
 $('#pNext').addEventListener('click', () => { state.page++; renderTable(); });
@@ -1287,27 +1202,6 @@ $('#btnSavePass').addEventListener('click', async () => {
     $('#oldP').value = $('#newP').value = $('#newP2').value = '';
     toast(result.message || 'Kata sandi berhasil diubah.', 'ok');
   } else toast(result.message || 'Kata sandi saat ini salah atau gagal dirubah.', 'del');
-});
-
-$('#btnWipe').addEventListener('click', () => {
-  openModal('#mConfirm');
-  $('#cJudul').textContent = 'Kosongkan seluruh register';
-  $('#cAva').style.cssText = 'background:var(--red-bg);color:var(--red)'; $('#cAva').textContent = '!';
-  $('#cYes').innerHTML = '<i data-lucide="trash-2"></i>Ya, Kosongkan DB'; icons();
-  $('#cYes').onclick = async () => {
-    const btn = $('#cYes');
-    btn.disabled = true; btn.innerHTML = '<i data-lucide="loader-circle" class="spin"></i> Menghapus...'; icons();
-    const result = await fetchAPI('wipeData');
-    if(result.success){
-      closeModals();
-      toast('Semua register telah dikosongkan dari database.', 'del');
-      await loadDataServer();
-    } else {
-      btn.disabled = false; btn.innerHTML = '<i data-lucide="trash-2"></i>Ya, Kosongkan DB'; icons();
-      toast('Gagal mengosongkan data.', 'del');
-    }
-    $('#cYes').onclick = yesDelete;
-  };
 });
 
 function renderAll(){ renderStats(); renderActivity(); renderCats(); renderRecent(); renderTable(); }
