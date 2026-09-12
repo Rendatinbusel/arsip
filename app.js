@@ -1,7 +1,7 @@
 /* =================================================================
    Arsip Rendatin — Sistem Pengarsipan Data (LIVE API CONNECTOR)
 ================================================================= */
-const API_URL = 'https://script.google.com/macros/s/AKfycbzQjwMx7V6VaBkptt-GI2ubrR09IG6LBvVrhJjqqBLyclNEFvxWqFK1LAV74hdT9P4rNg/exec'; 
+const API_URL = 'https://script.google.com/macros/s/AKfycbxLqzP55ZEwHv7lj_05wheBsxTE6WINdKA4YPnt93FL8OHla-JVe3aIn0DEw5KfundcBw/exec'; 
 const SESSION_KEY = 'arsipku.sesi.v2';
 
 const CATS = ['Surat Masuk', 'Surat Keluar', 'SK dan BA', 'Perencanaan'];
@@ -150,7 +150,6 @@ function closeMenu(){ $('#userMenu').classList.remove('open'); }
 // Sinkronisasi Pencarian Bilah Atas
 $('#globalSearch').addEventListener('input', e => {
   state.query = e.target.value;
-  $('#q').value = state.query;
   state.page = 1;
   if(state.view !== 'data') showView('data');
   renderTable();
