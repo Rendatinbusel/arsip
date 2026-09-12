@@ -195,7 +195,7 @@ function openForm(id){
   $$('#arsipForm .field').forEach(f => f.classList.remove('invalid'));
   
   if(edit){
-    const r = data.find(x => x.id === id);
+    const r = data.find(x => String(x.id) === String(id));
     $('#fJudul').value = r.judul; $('#fKategori').value = r.kategori;
     $('#fTanggal').value = r.tanggal; $('#fKet').value = r.ket || '';
     $('#fFile').value = '';
@@ -293,7 +293,7 @@ function openPreview(url, name){
 }
 
 function openDetail(id){
-  const r = data.find(x => x.id === id); if(!r) return;
+  const r = data.find(x => String(x.id) === String(id)); if(!r) return;
   state.detailId = id;
   $('#dAva').style.cssText = avStyle(r.kategori) + ';width:48px;height:48px;border-radius:13px;font-size:14px';
   $('#dAva').textContent = initials(r.judul);
@@ -327,7 +327,7 @@ $('#dEdit').addEventListener('click', () => { const id = state.detailId; closeMo
 $('#dDel').addEventListener('click', () => { const id = state.detailId; closeModals(); setTimeout(()=>openConfirm(id), 200); });
 
 function openConfirm(id){
-  const r = data.find(x => x.id === id); if(!r) return;
+  const r = data.find(x => String(x.id) === String(id)); if(!r) return;
   state.confirmId = id;
   $('#cAva').style.cssText = avStyle(r.kategori); $('#cAva').textContent = initials(r.judul);
   $('#cJudul').textContent = r.judul;
@@ -388,7 +388,7 @@ function renderCats(){
 function renderRecent(){
   const rows = [...data].sort((a,b) => b.createdAt.localeCompare(a.createdAt)).slice(0,5);
   $('#recentBody').innerHTML = rows.length ? rows.map(r => `
-    <tr data-id="${r.id}" class="${r.id === state.justAdded ? 'row-new' : ''}">
+    <tr data-id="${r.id}" class="${String(r.id) === String(state.justAdded) ? 'row-new' : ''}">
       <td><div class="cell-doc"><span class="avatar av" style="${avStyle(r.kategori)}">${initials(r.judul)}</span>
         <div><b>${esc(r.judul)}</b><span>${esc(r.ket || '-')}</span></div></div></td>
       <td><span class="chip">${esc(r.kategori)}</span></td>
@@ -426,7 +426,7 @@ function renderTable(){
       <button class="btn btn-ghost" id="resetF"><i data-lucide="rotate-ccw"></i>Setel ulang saringan</button></div></td></tr>`;
   }else{
     tb.innerHTML = pageRows.map(r => `
-      <tr data-id="${r.id}" class="${r.id === state.justAdded ? 'row-new' : ''}">
+      <tr data-id="${r.id}" class="${String(r.id) === String(state.justAdded) ? 'row-new' : ''}">
         <td><div class="cell-doc"><span class="avatar av" style="${avStyle(r.kategori)}">${initials(r.judul)}</span>
           <div><b>${hl(esc(r.judul), q)}</b><span>${hl(esc(r.ket || '-'), q)}</span></div></div></td>
         <td><span class="chip">${hl(esc(r.kategori), q)}</span></td>
