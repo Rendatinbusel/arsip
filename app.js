@@ -155,13 +155,14 @@ $('#globalSearch').addEventListener('input', e => {
   renderTable();
 });
 
-const MODALS = ['#mForm','#mDetail','#mConfirm','#mNotif'];
+const MODALS = ['#mForm','#mDetail','#mConfirm','#mNotif','#mPreview'];
 function openModal(sel){ $('#overlay').classList.add('show'); MODALS.forEach(m => $(m).classList.toggle('open', m === sel)); document.body.style.overflow='hidden'; }
 function closeModals(){ 
   $('#overlay').classList.remove('show'); 
   MODALS.forEach(m => $(m).classList.remove('open')); 
   document.body.style.overflow=''; 
   $('#cYes').onclick = yesDelete; // Reset fungsi tombol hapus agar tidak tersangkut
+  const pv = $('#pvFrame'); if(pv) pv.src = ''; // Hentikan pratinjau saat modal ditutup
 }
 $('#overlay').addEventListener('click', closeModals);
 $$('[data-close]').forEach(b => b.addEventListener('click', closeModals));
@@ -267,6 +268,30 @@ async function submitForm(){
 $('#arsipForm').addEventListener('submit', e => { e.preventDefault(); submitForm(); });
 $('#btnSave').addEventListener('click', submitForm);
 
+function driveFileId_(url){
+  if(!url) return null;
+  let m = String(url).match(/\/d\/([a-zA-Z0-9_-]{10,})/);
+  if(m) return m[1];
+  m = String(url).match(/[?&]id=([a-zA-Z0-9_-]{10,})/);
+  return m ? m[1] : null;
+}
+function openPreview(url, name){
+  $('#pvTitle').textContent = name || 'Pratinjau File';
+  $('#pvOpenTab').href = url || '#';
+  const fileId = driveFileId_(url);
+  const frame = $('#pvFrame');
+  if(fileId){
+    frame.src = `https://drive.google.com/file/d/${fileId}/preview`;
+    frame.style.display = 'block';
+    $('#pvFallback').style.display = 'none';
+  } else {
+    frame.src = '';
+    frame.style.display = 'none';
+    $('#pvFallback').style.display = 'flex';
+  }
+  openModal('#mPreview');
+}
+
 function openDetail(id){
   const r = data.find(x => x.id === id); if(!r) return;
   state.detailId = id;
@@ -280,8 +305,19 @@ function openDetail(id){
   
   if (r.fileUrl && r.fileName) {
     $('#dFileWrapper').style.display = 'block';
-    $('#dFileLink').innerHTML = `<a href="${r.fileUrl}" target="_blank" class="link"><i data-lucide="paperclip"></i>${esc(r.fileName)}</a>`;
-    icons();
+    if (String(r.fileUrl).startsWith('GAGAL_UPLOAD')) {
+      $('#dFileLink').innerHTML = `<span style="color:var(--red);display:inline-flex;align-items:center;gap:6px">
+        <i data-lucide="triangle-alert"></i>Upload file sebelumnya gagal, silakan unggah ulang.</span>`;
+      icons();
+    } else {
+      $('#dFileLink').innerHTML = `
+        <div class="file-actions">
+          <button type="button" class="btn btn-ghost btn-sm" id="dFilePreviewBtn"><i data-lucide="eye"></i>Pratinjau</button>
+          <a href="${r.fileUrl}" target="_blank" rel="noopener" class="link"><i data-lucide="paperclip"></i>${esc(r.fileName)}</a>
+        </div>`;
+      icons();
+      $('#dFilePreviewBtn').onclick = () => openPreview(r.fileUrl, r.fileName);
+    }
   } else {
     $('#dFileWrapper').style.display = 'none';
   }

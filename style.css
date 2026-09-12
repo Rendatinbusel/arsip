@@ -350,3 +350,16 @@ tr.row-new{animation:newRow 2.2s both}
   .d-grid{grid-template-columns:1fr}
   .page-head .btn{width:100%;justify-content:center}
 }
+
+/* ================= MODAL: PRATINJAU FILE ================= */
+.modal-lg{width:min(880px,calc(100vw - 32px))}
+.pv-body{padding:0 24px 18px;display:flex;flex-direction:column}
+.preview-frame{width:100%;height:70vh;border:0;border-radius:12px;background:var(--line-2)}
+.pv-fallback{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:10px;height:70vh;color:var(--muted);text-align:center;padding:0 20px}
+.pv-fallback i{width:40px;height:40px;color:var(--faint)}
+.file-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.btn-sm{padding:0 12px;height:34px;font-size:13px}
+@media(max-width:640px){
+  .preview-frame,.pv-fallback{height:60vh}
+}

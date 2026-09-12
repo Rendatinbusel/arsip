@@ -82,7 +82,7 @@
       <button class="hamburger" id="hamburger" aria-label="Buka menu"><i data-lucide="menu"></i></button>
       <div class="top-search">
         <i data-lucide="search"></i>
-        <input id="globalSearch" type="text" placeholder="Cari arsip… (judul, kategori)">
+        <input id="globalSearch" type="text" placeholder="Cari arsip… (judul, kategori)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
         <kbd>/</kbd>
       </div>
       <div class="top-right">
@@ -182,7 +182,7 @@
         <div class="toolbar">
           <div class="top-search">
             <i data-lucide="search"></i>
-            <input id="q" type="text" placeholder="Cari judul, keterangan…">
+            <input id="q" type="text" placeholder="Cari judul, keterangan…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
           </div>
           <div class="select"><select id="fCat" aria-label="Saring kategori"></select></div>
           <span style="flex:1"></span>
@@ -328,6 +328,25 @@
     <button class="btn btn-ghost" id="dDel" style="margin-right:auto;color:var(--red);border-color:var(--red-bg)"><i data-lucide="trash-2"></i>Hapus</button>
     <button class="btn btn-ghost" data-close>Tutup</button>
     <button class="btn btn-primary" id="dEdit"><i data-lucide="pencil"></i>Ubah</button>
+  </div>
+</div>
+
+<!-- ================= MODAL: PRATINJAU FILE ================= -->
+<div class="modal modal-lg" id="mPreview" role="dialog" aria-modal="true">
+  <div class="m-head">
+    <div><h3 id="pvTitle">Pratinjau File</h3><p>Pratinjau lampiran arsip.</p></div>
+    <button class="m-x" data-close aria-label="Tutup"><i data-lucide="x"></i></button>
+  </div>
+  <div class="m-body pv-body">
+    <iframe id="pvFrame" class="preview-frame" title="Pratinjau File" allow="autoplay"></iframe>
+    <div class="pv-fallback" id="pvFallback" style="display:none">
+      <i data-lucide="file-x"></i>
+      <p>Pratinjau tidak tersedia untuk file ini. Silakan buka langsung di tab baru.</p>
+    </div>
+  </div>
+  <div class="m-foot">
+    <button class="btn btn-ghost" data-close>Tutup</button>
+    <a class="btn btn-primary" id="pvOpenTab" href="#" target="_blank" rel="noopener"><i data-lucide="external-link"></i>Buka di Tab Baru</a>
   </div>
 </div>
 
