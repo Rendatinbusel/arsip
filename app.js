@@ -136,10 +136,13 @@ function showView(v){
 
 $$('.nav-item').forEach(b => b.addEventListener('click', () => {
   if(b.dataset.view === 'data'){
-    state.query = ''; state.page = 1;
-    $('#q').value = ''; $('#globalSearch').value = '';
+    state.query = ''; state.cat = 'semua'; state.page = 1;
+    $('#q').value = ''; $('#globalSearch').value = ''; $('#fCat').value = 'semua';
+    showView(b.dataset.view);
+    renderTable();
+  }else{
+    showView(b.dataset.view);
   }
-  showView(b.dataset.view);
 }));
 $('#menuProfile').addEventListener('click', () => { closeMenu(); showView('set'); });
 $('#btnSeeAll').addEventListener('click', () => showView('data'));
