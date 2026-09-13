@@ -132,20 +132,20 @@ function showView(v){
   $$('.nav-item').forEach(b => b.classList.toggle('active', b.dataset.view === v));
   $$('.view-pane').forEach(p => p.classList.toggle('active', p.id === 'v'+v.charAt(0).toUpperCase()+v.slice(1)));
   closeSidebar(); window.scrollTo({top:0});
+  if(v === 'data') renderTable();
+}
+
+function goToData(cat){
+  state.query = ''; state.cat = cat; state.page = 1;
+  $('#q').value = ''; $('#globalSearch').value = ''; $('#fCat').value = cat;
+  showView('data');
 }
 
 $$('.nav-item').forEach(b => b.addEventListener('click', () => {
-  if(b.dataset.view === 'data'){
-    state.query = ''; state.cat = 'semua'; state.page = 1;
-    $('#q').value = ''; $('#globalSearch').value = ''; $('#fCat').value = 'semua';
-    showView(b.dataset.view);
-    renderTable();
-  }else{
-    showView(b.dataset.view);
-  }
+  if(b.dataset.view === 'data') goToData('semua'); else showView(b.dataset.view);
 }));
 $('#menuProfile').addEventListener('click', () => { closeMenu(); showView('set'); });
-$('#btnSeeAll').addEventListener('click', () => showView('data'));
+$('#btnSeeAll').addEventListener('click', () => goToData('semua'));
 $('#btnRefreshData').addEventListener('click', async () => {
     const btn = $('#btnRefreshData');
     const ogHtml = btn.innerHTML;
@@ -215,7 +215,7 @@ function scopedData(){ return state.year !== 'semua' ? data.filter(x => itemYear
 function populateYearFilter(){
   const years = [...new Set(data.map(itemYear_).filter(Boolean))].sort((a,b) => b - a);
   if(state.year !== 'semua' && !years.includes(state.year)) state.year = 'semua';
-  fillSelect($('#fYear'), years, 'Semua');
+  fillSelect($('#fYear'), years, 'Semua Tahun');
   $('#fYear').value = state.year;
 }
 $('#fYear').addEventListener('change', e => {
@@ -409,12 +409,7 @@ const CAT_STAT_MAP_ = { stKeluar: 'Surat Keluar', stMasuk: 'Surat Masuk', stSkBa
 Object.entries(CAT_STAT_MAP_).forEach(([id, cat]) => {
   const card = $('#'+id).closest('.card.stat');
   card.style.cursor = 'pointer';
-  card.addEventListener('click', () => {
-    state.cat = cat; state.page = 1;
-    $('#fCat').value = cat;
-    showView('data');
-    renderTable();
-  });
+  card.addEventListener('click', () => goToData(cat));
 });
 function renderActivity(){
   const d = scopedData();
@@ -477,8 +472,7 @@ function renderTable(){
   
   if(!pageRows.length){
     tb.innerHTML = `<tr><td colspan="4"><div class="empty"><div class="ico"><i data-lucide="search-x"></i></div>
-      <h4>Tidak ditemukan</h4><p>Coba ubah kata kunci atau longgarkan saringan.</p>
-      <button class="btn btn-ghost" id="resetF"><i data-lucide="rotate-ccw"></i>Setel ulang saringan</button></div></td></tr>`;
+      <h4>Tidak ditemukan</h4><p>Coba ubah kata kunci atau longgarkan saringan.</p></div></td></tr>`;
   }else{
     tb.innerHTML = pageRows.map(r => `
       <tr data-id="${r.id}" class="${String(r.id) === String(state.justAdded) ? 'row-new' : ''}">
@@ -500,12 +494,6 @@ function renderTable(){
   $('#pageInfo').textContent = state.page + ' / ' + pages;
   $('#pPrev').disabled = state.page <= 1;
   $('#pNext').disabled = state.page >= pages;
-  
-  const rf = $('#resetF');
-  if(rf) rf.addEventListener('click', () => {
-    state.query = ''; state.cat = 'semua'; state.page = 1;
-    $('#q').value = ''; $('#globalSearch').value = ''; $('#fCat').value = 'semua'; renderTable();
-  });
 }
 
 ['#tbody', '#recentBody'].forEach(sel => {
