@@ -68,6 +68,7 @@ $('#loginForm').addEventListener('submit', async e => {
   if (result.success) {
     sessionStorage.setItem(SESSION_KEY, JSON.stringify(result.user));
     profil.name = result.user.name;
+    profil.username = result.user.username;
     data = result.data || [];
     dataLoaded = true;
     $('#loginErr').classList.remove('show');
@@ -556,7 +557,7 @@ $('#btnSavePass').addEventListener('click', async () => {
   const btn = $('#btnSavePass');
   btn.disabled = true; btn.innerHTML = '<i data-lucide="loader-circle" class="spin"></i> Memproses...'; icons();
   
-  const result = await fetchAPI('updatePassword', { oldPass: old, newPass: nw });
+  const result = await fetchAPI('updatePassword', { username: profil.username, oldPass: old, newPass: nw });
   
   btn.disabled = false; btn.innerHTML = '<i data-lucide="key-round"></i>Ubah Sandi'; icons();
   
@@ -574,6 +575,7 @@ function renderAll(){ populateYearFilter(); renderStats(); renderActivity(); ren
     if(raw) {
       const parsed = JSON.parse(raw);
       profil.name = parsed.name || 'Petugas';
+      profil.username = parsed.username;
       enterApp();
     }
   } catch(e) {}
