@@ -215,7 +215,7 @@ function scopedData(){ return state.year !== 'semua' ? data.filter(x => itemYear
 function populateYearFilter(){
   const years = [...new Set(data.map(itemYear_).filter(Boolean))].sort((a,b) => b - a);
   if(state.year !== 'semua' && !years.includes(state.year)) state.year = 'semua';
-  fillSelect($('#fYear'), years, 'Semua Tahun');
+  fillSelect($('#fYear'), years, 'Tahun');
   $('#fYear').value = state.year;
 }
 $('#fYear').addEventListener('change', e => {
