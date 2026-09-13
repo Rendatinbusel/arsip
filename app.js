@@ -19,6 +19,7 @@ const hl = (escaped,q) => {if(!q)return escaped;const rx=new RegExp('('+q.replac
 const icons = () => {try{lucide.createIcons();}catch(e){}};
 
 let data = [];
+let dataLoaded = false;
 let profil = { name: 'Memuat...' };
 const state = { view:'dash', query:'', cat:'semua', sortKey:'createdAt', sortDir:'desc', page:1, editingId:null, detailId:null, confirmId:null, justAdded:null };
 
@@ -67,6 +68,8 @@ $('#loginForm').addEventListener('submit', async e => {
   if (result.success) {
     sessionStorage.setItem(SESSION_KEY, JSON.stringify(result.user));
     profil.name = result.user.name;
+    data = result.data || [];
+    dataLoaded = true;
     $('#loginErr').classList.remove('show');
     enterApp();
     toast(`Selamat datang, <b>${esc(profil.name)}</b>.`, 'ok');
@@ -82,6 +85,7 @@ $('#menuLogout').addEventListener('click', logout);
 function logout(){
   sessionStorage.removeItem(SESSION_KEY);
   data = [];
+  dataLoaded = false;
   $('#viewApp').classList.add('hide'); $('#viewLogin').classList.remove('hide');
   $('#loginPass').value = ''; $('#loginErr').classList.remove('show');
   toast('Anda telah keluar dari sistem.', 'info');
@@ -93,9 +97,13 @@ async function enterApp(){
   applyProfile();
   showView('dash');
   
-  $('#dashHello').innerHTML = '<i data-lucide="loader-circle" class="spin" style="width:20px;height:20px;margin-bottom:-2px"></i> Memuat Data...';
-  icons();
-  await loadDataServer();
+  if (dataLoaded) {
+    renderAll();
+  } else {
+    $('#dashHello').innerHTML = '<i data-lucide="loader-circle" class="spin" style="width:20px;height:20px;margin-bottom:-2px"></i> Memuat Data...';
+    icons();
+    await loadDataServer();
+  }
   $('#dashHello').textContent = 'Selamat datang, ' + (profil.name).split(' ')[0];
 }
 
@@ -103,6 +111,7 @@ async function loadDataServer() {
   const result = await fetchAPI('getData');
   if (result.success) {
     data = result.data || [];
+    dataLoaded = true;
     renderAll();
   } else {
     toast('Gagal memuat data arsip dari server.', 'del');
