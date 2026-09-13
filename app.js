@@ -1,7 +1,7 @@
 /* =================================================================
    Arsip Rendatin — Sistem Pengarsipan Data (LIVE API CONNECTOR)
 ================================================================= */
-const API_URL = 'https://script.google.com/macros/s/AKfycbyAtI8XUTokgEI8lTgBlLCmazHnWmoYnpObK40_RpAIZFE7hWeL7VBrS5Q6YUEVcroMoQ/exec'; 
+const API_URL = 'https://script.google.com/macros/s/AKfycbxLqzP55ZEwHv7lj_05wheBsxTE6WINdKA4YPnt93FL8OHla-JVe3aIn0DEw5KfundcBw/exec'; 
 const SESSION_KEY = 'arsipku.sesi.v2';
 
 const CATS = ['Surat Masuk', 'Surat Keluar', 'SK dan BA', 'Perencanaan'];
@@ -134,7 +134,13 @@ function showView(v){
   closeSidebar(); window.scrollTo({top:0});
 }
 
-$$('.nav-item').forEach(b => b.addEventListener('click', () => showView(b.dataset.view)));
+$$('.nav-item').forEach(b => b.addEventListener('click', () => {
+  if(b.dataset.view === 'data'){
+    state.query = ''; state.page = 1;
+    $('#q').value = ''; $('#globalSearch').value = '';
+  }
+  showView(b.dataset.view);
+}));
 $('#menuProfile').addEventListener('click', () => { closeMenu(); showView('set'); });
 $('#btnSeeAll').addEventListener('click', () => showView('data'));
 $('#btnRefreshData').addEventListener('click', async () => {
@@ -386,6 +392,7 @@ $('#cYes').onclick = yesDelete;
 function renderStats(){
   const d = scopedData();
   $('#stTotal').textContent = d.length;
+  $('#sbCount').textContent = d.length;
   $('#stKeluar').textContent = d.filter(x => x.kategori === 'Surat Keluar').length;
   $('#stMasuk').textContent = d.filter(x => x.kategori === 'Surat Masuk').length;
   $('#stSkBa').textContent = d.filter(x => x.kategori === 'SK dan BA').length;
