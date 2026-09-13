@@ -21,7 +21,7 @@ const icons = () => {try{lucide.createIcons();}catch(e){}};
 let data = [];
 let dataLoaded = false;
 let profil = { name: 'Memuat...' };
-const state = { view:'dash', query:'', cat:'semua', sortKey:'createdAt', sortDir:'desc', page:1, editingId:null, detailId:null, confirmId:null, justAdded:null };
+const state = { view:'dash', query:'', cat:'semua', year:'semua', sortKey:'createdAt', sortDir:'desc', page:1, editingId:null, detailId:null, confirmId:null, justAdded:null };
 
 async function fetchAPI(action, payload = {}) {
   try {
@@ -194,6 +194,25 @@ function fillSelect(sel, arr, all){ sel.innerHTML = (all?`<option value="semua">
 fillSelect($('#fKategori'), CATS);
 fillSelect($('#fCat'), CATS, 'Semua Kategori');
 
+function yearRange_(){
+  const cy = new Date().getFullYear(), arr = [];
+  for(let y = cy + 1; y >= cy - 10; y--) arr.push(String(y));
+  return arr;
+}
+fillSelect($('#fTahun'), yearRange_());
+
+function itemYear_(x){ return String(x.tahun || (x.tanggal ? new Date(x.tanggal).getFullYear() : '') || ''); }
+function scopedData(){ return state.year !== 'semua' ? data.filter(x => itemYear_(x) === state.year) : data; }
+function populateYearFilter(){
+  const years = [...new Set(data.map(itemYear_).filter(Boolean))].sort((a,b) => b - a);
+  if(state.year !== 'semua' && !years.includes(state.year)) state.year = 'semua';
+  fillSelect($('#fYear'), years, 'Semua Tahun');
+  $('#fYear').value = state.year;
+}
+$('#fYear').addEventListener('change', e => {
+  state.year = e.target.value; state.page = 1; renderAll();
+});
+
 function setInvalid(n, on){ document.querySelector(`.field[data-f="${n}"]`).classList.toggle('invalid', on); }
 
 function openForm(id){
@@ -207,10 +226,12 @@ function openForm(id){
     const r = data.find(x => String(x.id) === String(id));
     $('#fJudul').value = r.judul; $('#fKategori').value = r.kategori;
     $('#fTanggal').value = r.tanggal; $('#fKet').value = r.ket || '';
+    $('#fTahun').value = r.tahun || new Date().getFullYear();
     $('#fFile').value = '';
   }else{
     $('#arsipForm').reset();
     $('#fTanggal').value = new Date().toISOString().slice(0,10);
+    $('#fTahun').value = new Date().getFullYear();
   }
   openModal('#mForm'); setTimeout(() => $('#fJudul').focus(), 280);
 }
@@ -234,6 +255,7 @@ async function submitForm(){
       judul, 
       kategori: $('#fKategori').value, 
       tanggal, 
+      tahun: $('#fTahun').value,
       ket: $('#fKet').value.trim(),
       fileBase64,
       fileName,
@@ -362,23 +384,36 @@ async function yesDelete(){
 $('#cYes').onclick = yesDelete;
 
 function renderStats(){
-  $('#stTotal').textContent = data.length;
-  $('#stKeluar').textContent = data.filter(x => x.kategori === 'Surat Keluar').length;
-  $('#stMasuk').textContent = data.filter(x => x.kategori === 'Surat Masuk').length;
-  $('#stSkBa').textContent = data.filter(x => x.kategori === 'SK dan BA').length;
-  $('#stPerencanaan').textContent = data.filter(x => x.kategori === 'Perencanaan').length;
+  const d = scopedData();
+  $('#stTotal').textContent = d.length;
+  $('#stKeluar').textContent = d.filter(x => x.kategori === 'Surat Keluar').length;
+  $('#stMasuk').textContent = d.filter(x => x.kategori === 'Surat Masuk').length;
+  $('#stSkBa').textContent = d.filter(x => x.kategori === 'SK dan BA').length;
+  $('#stPerencanaan').textContent = d.filter(x => x.kategori === 'Perencanaan').length;
 
   const now = Date.now(), w = 7*864e5;
-  const baru = data.filter(x => new Date(x.createdAt).getTime() >= now-w).length;
+  const baru = d.filter(x => new Date(x.createdAt).getTime() >= now-w).length;
   $('#trTotal').textContent = '+' + baru + ' pekan ini';
 }
+const CAT_STAT_MAP_ = { stKeluar: 'Surat Keluar', stMasuk: 'Surat Masuk', stSkBa: 'SK dan BA', stPerencanaan: 'Perencanaan' };
+Object.entries(CAT_STAT_MAP_).forEach(([id, cat]) => {
+  const card = $('#'+id).closest('.card.stat');
+  card.style.cursor = 'pointer';
+  card.addEventListener('click', () => {
+    state.cat = cat; state.page = 1;
+    $('#fCat').value = cat;
+    showView('data');
+    renderTable();
+  });
+});
 function renderActivity(){
+  const d = scopedData();
   const days = []; const today = new Date(); today.setHours(0,0,0,0);
   for(let i=6; i>=0; i--){
-    const d = new Date(today.getTime() - i*864e5);
-    const next = d.getTime() + 864e5;
-    const n = data.filter(x => { const t = new Date(x.createdAt).getTime(); return t >= d.getTime() && t < next; }).length;
-    days.push({label: fmtDay(d), n});
+    const dt = new Date(today.getTime() - i*864e5);
+    const next = dt.getTime() + 864e5;
+    const n = d.filter(x => { const t = new Date(x.createdAt).getTime(); return t >= dt.getTime() && t < next; }).length;
+    days.push({label: fmtDay(dt), n});
   }
   const max = Math.max(1, ...days.map(d => d.n));
   const total = days.reduce((s,d) => s + d.n, 0);
@@ -387,7 +422,8 @@ function renderActivity(){
     `<div class="b"><div class="fill${d.n===max && d.n>0 ? ' hot':''}" style="height:${Math.max(5,Math.round(d.n/max*100))}%" data-tip="${d.n} arsip"></div><span class="d">${d.label}</span></div>`).join('');
 }
 function renderCats(){
-  const counts = CATS.map(c => ({c, n: data.filter(x => x.kategori === c).length})).sort((a,b) => b.n - a.n);
+  const d = scopedData();
+  const counts = CATS.map(c => ({c, n: d.filter(x => x.kategori === c).length})).sort((a,b) => b.n - a.n);
   const max = Math.max(1, ...counts.map(x => x.n));
   $('#catBox').innerHTML = counts.length
     ? counts.map(x => `<div class="cat"><span class="n">${esc(x.c)}</span><span class="tr"><span class="fl" data-w="${Math.round(x.n/max*100)}"></span></span><span class="v">${x.n}</span></div>`).join('')
@@ -395,7 +431,7 @@ function renderCats(){
   requestAnimationFrame(() => requestAnimationFrame(() => $$('.cat .fl').forEach(f => f.style.width = f.dataset.w + '%')));
 }
 function renderRecent(){
-  const rows = [...data].sort((a,b) => b.createdAt.localeCompare(a.createdAt)).slice(0,5);
+  const rows = [...scopedData()].sort((a,b) => b.createdAt.localeCompare(a.createdAt)).slice(0,5);
   $('#recentBody').innerHTML = rows.length ? rows.map(r => `
     <tr data-id="${r.id}" class="${String(r.id) === String(state.justAdded) ? 'row-new' : ''}">
       <td><div class="cell-doc"><span class="avatar av" style="${avStyle(r.kategori)}">${initials(r.judul)}</span>
@@ -411,7 +447,7 @@ function renderRecent(){
 }
 
 function filtered(){
-  let rows = [...data];
+  let rows = [...scopedData()];
   const q = state.query.trim().toLowerCase();
   if(q) rows = rows.filter(r => [r.judul, r.ket, r.kategori].some(v => (v||'').toLowerCase().includes(q)));
   if(state.cat !== 'semua') rows = rows.filter(r => r.kategori === state.cat);
@@ -532,7 +568,7 @@ $('#btnSavePass').addEventListener('click', async () => {
   } else toast(result.message || 'Kata sandi saat ini salah atau gagal dirubah.', 'del');
 });
 
-function renderAll(){ renderStats(); renderActivity(); renderCats(); renderRecent(); renderTable(); }
+function renderAll(){ populateYearFilter(); renderStats(); renderActivity(); renderCats(); renderRecent(); renderTable(); }
 
 (async function init(){
   try {

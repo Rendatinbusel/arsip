@@ -245,6 +245,7 @@ tr:hover .c-act .icon-btn{opacity:1;transform:none}
 .select::after{content:'';position:absolute;right:14px;top:50%;width:8px;height:8px;
   border-right:2px solid var(--faint);border-bottom:2px solid var(--faint);
   transform:translateY(-70%) rotate(45deg);pointer-events:none}
+.year-select select{width:112px}
 
 .set-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
 
