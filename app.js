@@ -1,7 +1,7 @@
 /* =================================================================
    Arsip Rendatin — Sistem Pengarsipan Data (LIVE API CONNECTOR)
 ================================================================= */
-const API_URL = 'https://script.google.com/macros/s/AKfycbyAtI8XUTokgEI8lTgBlLCmazHnWmoYnpObK40_RpAIZFE7hWeL7VBrS5Q6YUEVcroMoQ/exec'; 
+const API_URL = 'https://script.google.com/macros/s/AKfycbxbubsU5cKR3ALWJPHVIiCe0QCgRjf1qdmU9i1iNKmwzNgA1Jw2P60T2EsPjYLiJbErcA/exec'; 
 const SESSION_KEY = 'arsipku.sesi.v2';
 
 const CATS = ['Surat Masuk', 'Surat Keluar', 'SK dan BA', 'Perencanaan'];
