@@ -82,7 +82,7 @@
       <button class="hamburger" id="hamburger" aria-label="Buka menu"><i data-lucide="menu"></i></button>
       <div class="top-search">
         <i data-lucide="search"></i>
-        <input id="globalSearch" type="text" placeholder="Cari arsip… (judul, kategori)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        <input id="globalSearch" type="text" placeholder="Cari arsip" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
         <kbd>/</kbd>
       </div>
       <div class="top-right">
@@ -145,7 +145,7 @@
           <div class="card">
             <div class="card-h">
               <div><h3>Aktivitas Pendaftaran</h3><p>7 hari terakhir</p></div>
-              <span class="chip" id="actTotal">0 arsip</span>
+              <span class="chip" id="actTotal">0 pendaftaran</span>
             </div>
             <div class="card-b"><div class="bars" id="actBars"></div></div>
           </div>
@@ -159,7 +159,7 @@
 
         <div class="card tbl-card">
           <div class="card-h" style="padding-bottom:14px">
-            <div><h3>Arsip Terbaru</h3><p>5 arsip terakhir</p></div>
+            <div><h3>Arsip Terbaru</h3><p>5 pendaftaran terakhir</p></div>
             <button class="link" id="btnSeeAll">Lihat semua<i data-lucide="arrow-right"></i></button>
           </div>
           <div class="tbl-scroll">
@@ -286,10 +286,6 @@
           <div class="inwrap plain"><input id="fTanggal" type="date"></div>
           <div class="f-err">Tanggal wajib diisi.</div>
         </div>
-      </div>
-      <div class="field">
-        <label for="fTahun">Tahun</label>
-        <div class="inwrap plain"><select class="sel" id="fTahun"></select></div>
       </div>
       <div class="field">
         <label for="fKet">Keterangan</label>

@@ -204,13 +204,6 @@ function fillSelect(sel, arr, all){ sel.innerHTML = (all?`<option value="semua">
 fillSelect($('#fKategori'), CATS);
 fillSelect($('#fCat'), CATS, 'Semua Kategori');
 
-function yearRange_(){
-  const cy = new Date().getFullYear(), arr = [];
-  for(let y = cy + 1; y >= cy - 10; y--) arr.push(String(y));
-  return arr;
-}
-fillSelect($('#fTahun'), yearRange_());
-
 function itemYear_(x){ return String(x.tahun || (x.tanggal ? new Date(x.tanggal).getFullYear() : '') || ''); }
 function scopedData(){ return state.year !== 'semua' ? data.filter(x => itemYear_(x) === state.year) : data; }
 function populateYearFilter(){
@@ -236,12 +229,10 @@ function openForm(id){
     const r = data.find(x => String(x.id) === String(id));
     $('#fJudul').value = r.judul; $('#fKategori').value = r.kategori;
     $('#fTanggal').value = r.tanggal; $('#fKet').value = r.ket || '';
-    $('#fTahun').value = r.tahun || new Date().getFullYear();
     $('#fFile').value = '';
   }else{
     $('#arsipForm').reset();
     $('#fTanggal').value = new Date().toISOString().slice(0,10);
-    $('#fTahun').value = new Date().getFullYear();
   }
   openModal('#mForm'); setTimeout(() => $('#fJudul').focus(), 280);
 }
@@ -265,7 +256,6 @@ async function submitForm(){
       judul, 
       kategori: $('#fKategori').value, 
       tanggal, 
-      tahun: $('#fTahun').value,
       ket: $('#fKet').value.trim(),
       fileBase64,
       fileName,
