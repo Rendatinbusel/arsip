@@ -1,7 +1,8 @@
 /* =================================================================
    Arsip Rendatin — Sistem Pengarsipan Data (LIVE API CONNECTOR)
 ================================================================= */
-const API_URL = 'https://script.google.com/macros/s/AKfycbxbubsU5cKR3ALWJPHVIiCe0QCgRjf1qdmU9i1iNKmwzNgA1Jw2P60T2EsPjYLiJbErcA/exec'; 
+const API_URL = 'https://gobgpaouqymsnleauiim.supabase.co/functions/v1/api';
+const SUPABASE_KEY = 'sb_publishable_V__Lj9OuydfsBjt7kUeR8g_ndmz2CFD';
 const SESSION_KEY = 'arsipku.sesi.v2';
 
 const CATS = ['Surat Masuk', 'Surat Keluar', 'SK dan BA', 'Perencanaan'];
@@ -28,7 +29,7 @@ async function fetchAPI(action, payload = {}) {
     const res = await fetch(API_URL, {
       method: 'POST',
       body: JSON.stringify({ action, ...payload }),
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+      headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY }
     });
     return await res.json();
   } catch (err) {
@@ -209,7 +210,7 @@ function scopedData(){ return state.year !== 'semua' ? data.filter(x => itemYear
 function populateYearFilter(){
   const years = [...new Set(data.map(itemYear_).filter(Boolean))].sort((a,b) => b - a);
   if(state.year !== 'semua' && !years.includes(state.year)) state.year = 'semua';
-  fillSelect($('#fYear'), years, 'Tahun');
+  fillSelect($('#fYear'), years, 'Semua Tahun');
   $('#fYear').value = state.year;
 }
 $('#fYear').addEventListener('change', e => {
