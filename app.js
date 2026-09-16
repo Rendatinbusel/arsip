@@ -274,11 +274,29 @@ async function submitForm(){
 
     if (result.success) {
       closeModals();
+      const wasEditing = !!state.editingId;
       state.justAdded = result.id || state.editingId;
-      if(!state.editingId) { state.page = 1; state.sortKey = 'createdAt'; state.sortDir = 'desc'; }
-      if(state.view !== 'data') showView('data');
+
+      if (result.item) {
+        // Update state lokal langsung dari respons server — tidak perlu fetch ulang
+        // seluruh tabel arsip, jadi tampilan tetap ringan walau datanya sudah banyak.
+        if (wasEditing) {
+          const idx = data.findIndex(x => String(x.id) === String(state.editingId));
+          if (idx !== -1) data[idx] = result.item; else data.unshift(result.item);
+        } else {
+          data.unshift(result.item);
+          state.page = 1; state.sortKey = 'createdAt'; state.sortDir = 'desc';
+        }
+        if (state.view !== 'data') showView('data');
+        renderAll();
+      } else {
+        // Fallback bila server (versi lama) belum mengirim "item" lengkap
+        if (!wasEditing) { state.page = 1; state.sortKey = 'createdAt'; state.sortDir = 'desc'; }
+        if (state.view !== 'data') showView('data');
+        await loadDataServer();
+      }
+
       toast(result.message || 'Data berhasil disimpan.', 'ok');
-      await loadDataServer();
     } else {
       toast(result.message || 'Gagal menyimpan data.', 'del');
     }
@@ -368,16 +386,19 @@ function openConfirm(id){
 
 async function yesDelete(){
   const btn = $('#cYes');
+  const idToDelete = state.confirmId;
   btn.disabled = true; btn.innerHTML = '<i data-lucide="loader-circle" class="spin"></i> Menghapus...'; icons();
 
-  const result = await fetchAPI('deleteData', { id: state.confirmId });
+  const result = await fetchAPI('deleteData', { id: idToDelete });
 
   btn.disabled = false; btn.innerHTML = '<i data-lucide="trash-2"></i>Ya, Hapus'; icons();
 
   if(result.success){
     closeModals();
+    // Hapus dari state lokal — tidak perlu fetch ulang seluruh data dari server
+    data = data.filter(x => String(x.id) !== String(idToDelete));
+    renderAll();
     toast(result.message || 'Arsip berhasil dihapus.', 'del');
-    await loadDataServer();
   } else {
     toast(result.message || 'Gagal menghapus data.', 'del');
   }
