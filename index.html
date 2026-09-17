@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#b91c1c">
 <title>Arsip Rendatin — Sistem Pengarsipan Data</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,20 +12,15 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
 <div id="viewLogin">
   <div class="l-card">
-    <div class="l-logo">
-      <div class="mark"><img src="https://www.kpu.go.id/images/1627539868logo-kpu.png" alt="Logo KPU"></div>
-      <div><b>Arsip Rendatin</b><span>KPU Buton Selatan</span></div>
-    </div>
-    <h2>Portal Arsip Rendatin</h2>
-    <p class="sub">Silahkan masuk untuk mengelola arsip.</p>
+    <div class="l-logo"><div class="mark"><img src="https://www.kpu.go.id/images/1627539868logo-kpu.png" alt="Logo KPU"></div><div><b>Arsip Rendatin</b><span>KPU Buton Selatan</span></div></div>
+    <h2>Portal Arsip Rendatin</h2><p class="sub">Silakan masuk untuk mengelola arsip.</p>
     <form id="loginForm" novalidate>
-      <div class="field"><label for="loginUser">Nama Pengguna</label><div class="inwrap"><i data-lucide="user"></i><input id="loginUser" type="text" autocomplete="username"></div></div>
-      <div class="field"><label for="loginPass">Kata Sandi</label><div class="inwrap"><i data-lucide="lock"></i><input id="loginPass" type="password" autocomplete="current-password"><button type="button" class="eye" id="togglePass"><i data-lucide="eye"></i></button></div></div>
-      <div class="row-between"><label class="check"><input type="checkbox" checked> Ingat saya</label><button type="button" class="btn-text" id="forgot" style="padding:0;color:var(--primary)">Lupa sandi?</button></div>
-      <div class="l-err" id="loginErr"><i data-lucide="triangle-alert"></i><span id="loginErrMsg">Salah.</span></div>
+      <div class="field"><label for="loginUser">Nama Pengguna</label><div class="inwrap"><i data-lucide="user"></i><input id="loginUser" type="text" placeholder="Masukkan username" autocomplete="username"></div></div>
+      <div class="field"><label for="loginPass">Kata Sandi</label><div class="inwrap"><i data-lucide="lock"></i><input id="loginPass" type="password" placeholder="Masukkan kata sandi" autocomplete="current-password"><button type="button" class="eye" id="togglePass" aria-label="Tampilkan sandi"><i data-lucide="eye"></i></button></div></div>
+      <div class="row-between"><span class="secure-note"><i data-lucide="shield-check"></i> Sesi aman di server</span><button type="button" class="btn-text" id="forgot" style="padding:0;color:var(--primary)">Lupa sandi?</button></div>
+      <div class="l-err" id="loginErr"><i data-lucide="triangle-alert"></i><span id="loginErrMsg">Nama pengguna atau kata sandi salah.</span></div>
       <button class="btn btn-primary" type="submit" id="loginBtn"><i data-lucide="log-in"></i> Masuk</button>
     </form>
   </div>
@@ -32,139 +28,68 @@
 
 <div id="viewApp" class="hide">
   <aside class="sb" id="sidebar">
-    <div class="l-logo"><div class="mark"><img src="https://www.kpu.go.id/images/1627539868logo-kpu.png" alt="Logo"></div><div><b style="color:var(--text)">Arsip Rendatin</b><span style="color:var(--muted)">Manajemen Arsip</span></div></div>
+    <div class="l-logo"><div class="mark"><img src="https://www.kpu.go.id/images/1627539868logo-kpu.png" alt="Logo KPU"></div><div><b style="color:var(--text)">Arsip Rendatin</b><span style="color:var(--muted)">Manajemen Arsip</span></div></div>
     <p class="sb-label">Menu Utama</p>
     <button class="nav-item active" data-view="dash"><i data-lucide="layout-dashboard"></i>Dashboard</button>
     <button class="nav-item" data-view="data"><i data-lucide="folder-archive"></i>Data Arsip<span class="count" id="sbCount">0</span></button>
+    <button class="nav-item hide" id="navUsers" data-view="users"><i data-lucide="users"></i>Manajemen User<span class="count" id="userCount">0</span></button>
     <p class="sb-label">Sistem</p>
     <button class="nav-item" data-view="set"><i data-lucide="settings"></i>Pengaturan</button>
-    <button class="nav-item hide" id="navUsers" data-view="users"><i data-lucide="users"></i>Pengguna</button>
-    <div class="sb-foot">
-      <div class="sb-user"><span class="avatar" id="sbAva" style="background:var(--primary)">—</span><div class="who"><b id="sbName">Memuat...</b><span>Petugas Arsip</span></div></div>
-      <button class="sb-out" id="btnLogout"><i data-lucide="log-out"></i>Keluar</button>
-    </div>
+    <div class="sb-foot"><div class="sb-user"><span class="avatar" id="sbAva" style="background:var(--primary)">—</span><div class="who"><b id="sbName">Memuat...</b><span id="roleBadge">Petugas</span></div></div><button class="sb-out" id="btnLogout"><i data-lucide="log-out"></i>Keluar</button></div>
   </aside>
   <div class="scrim" id="scrim"></div>
-
   <div class="main">
     <header class="topbar">
-      <button class="hamburger" id="hamburger"><i data-lucide="menu"></i></button>
-      <div class="top-search"><i data-lucide="search"></i><input id="globalSearch" type="text" placeholder="Cari arsip"><kbd>/</kbd></div>
-      <div class="top-right">
-        <div class="select year-select"><select id="fYear"></select></div>
-        <button class="icon-pill" id="btnNotif"><i data-lucide="bell"></i><span class="dot-red" id="notifDot"></span></button>
-        <button class="top-user" id="btnUserMenu"><span class="avatar av" id="topAva" style="background:var(--primary)">—</span><span class="who-txt" id="topName">Memuat...</span><i data-lucide="chevron-down"></i></button>
-        <div class="menu" id="userMenu"><button id="menuProfile"><i data-lucide="user-cog"></i>Pengaturan Akun</button><button id="menuNew"><i data-lucide="plus"></i>Arsip Baru</button><hr><button class="danger" id="menuLogout"><i data-lucide="log-out"></i>Keluar</button></div>
-      </div>
+      <button class="hamburger" id="hamburger" aria-label="Buka menu"><i data-lucide="menu"></i></button>
+      <div class="top-search"><i data-lucide="search"></i><input id="globalSearch" type="text" placeholder="Cari arsip" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"><kbd>/</kbd></div>
+      <div class="top-right"><div class="select year-select"><select id="fYear" aria-label="Saring tahun"></select></div><button class="icon-pill" id="btnNotif" aria-label="Notifikasi"><i data-lucide="bell"></i></button><button class="top-user" id="btnUserMenu"><span class="avatar av" id="topAva" style="background:var(--primary)">—</span><span class="who-txt" id="topName">Memuat...</span><span class="role-badge-top" id="roleBadgeTop">Petugas</span><i data-lucide="chevron-down"></i></button><div class="menu" id="userMenu"><button id="menuProfile"><i data-lucide="user-cog"></i>Pengaturan Akun</button><button id="menuNew"><i data-lucide="plus"></i>Arsip Baru</button><button id="menuUsers" class="hide"><i data-lucide="users"></i>Manajemen User</button><hr><button class="danger" id="menuLogout"><i data-lucide="log-out"></i>Keluar</button></div></div>
     </header>
 
     <main class="content">
       <section class="view-pane active" id="vDash">
         <div class="page-head"><div><div class="crumb">Beranda</div><h1 id="dashHello">Dashboard</h1><p id="dashDate">—</p></div><button class="btn btn-primary" id="btnNewDash"><i data-lucide="plus"></i>Arsip Baru</button></div>
-        <div class="stats">
-          <div class="card stat"><div class="top"><div class="ico t1"><i data-lucide="archive"></i></div><span class="trend" id="trTotal">—</span></div><div><b class="num" id="stTotal">0</b><div class="lbl">Total Arsip</div></div></div>
-          <div class="card stat"><div class="top"><div class="ico t2"><i data-lucide="send"></i></div></div><div><b class="num" id="stKeluar">0</b><div class="lbl">Surat Keluar</div></div></div>
-          <div class="card stat"><div class="top"><div class="ico t3"><i data-lucide="inbox"></i></div></div><div><b class="num" id="stMasuk">0</b><div class="lbl">Surat Masuk</div></div></div>
-          <div class="card stat"><div class="top"><div class="ico t4"><i data-lucide="file-text"></i></div></div><div><b class="num" id="stSkBa">0</b><div class="lbl">SK dan BA</div></div></div>
-          <div class="card stat"><div class="top"><div class="ico t5"><i data-lucide="clipboard-list"></i></div></div><div><b class="num" id="stPerencanaan">0</b><div class="lbl">Perencanaan</div></div></div>
-        </div>
-        <div class="grid-2">
-          <div class="card"><div class="card-h"><div><h3>Aktivitas Pengisian</h3></div><span class="chip" id="actTotal">arsip</span></div><div class="card-b"><div class="bars" id="actBars"></div></div></div>
-          <div class="card"><div class="card-h"><div><h3>Distribusi Kategori</h3></div></div><div class="card-b" id="catBox"></div></div>
-        </div>
-        <div class="card tbl-card">
-          <div class="card-h" style="padding-bottom:14px"><div><h3>Arsip Terbaru</h3></div><button class="link" id="btnSeeAll">Lihat semua<i data-lucide="arrow-right"></i></button></div>
-          <div class="tbl-scroll"><table><thead><tr><th>Arsip</th><th>Kategori</th><th>Tanggal Dokumen</th><th></th></tr></thead><tbody id="recentBody"></tbody></table></div>
-        </div>
+        <div class="stats"><div class="card stat"><div class="top"><div class="ico t1"><i data-lucide="archive"></i></div><span class="trend" id="trTotal">—</span></div><div><b class="num" id="stTotal">0</b><div class="lbl">Total Arsip</div></div></div><div class="card stat"><div class="top"><div class="ico t2"><i data-lucide="send"></i></div><span class="trend flat">Kategori</span></div><div><b class="num" id="stKeluar">0</b><div class="lbl">Surat Keluar</div></div></div><div class="card stat"><div class="top"><div class="ico t3"><i data-lucide="inbox"></i></div><span class="trend flat">Kategori</span></div><div><b class="num" id="stMasuk">0</b><div class="lbl">Surat Masuk</div></div></div><div class="card stat"><div class="top"><div class="ico t4"><i data-lucide="file-text"></i></div><span class="trend flat">Kategori</span></div><div><b class="num" id="stSkBa">0</b><div class="lbl">SK dan BA</div></div></div><div class="card stat"><div class="top"><div class="ico t5"><i data-lucide="clipboard-list"></i></div><span class="trend flat">Kategori</span></div><div><b class="num" id="stPerencanaan">0</b><div class="lbl">Perencanaan</div></div></div></div>
+        <div class="grid-2"><div class="card"><div class="card-h"><div><h3>Aktivitas Pengisian</h3><p>7 hari terakhir</p></div><span class="chip" id="actTotal">arsip</span></div><div class="card-b"><div class="bars" id="actBars"></div></div></div><div class="card"><div class="card-h"><div><h3>Distribusi Kategori</h3><p>Jumlah arsip per kategori</p></div></div><div class="card-b" id="catBox"></div></div></div>
+        <div class="card tbl-card"><div class="card-h" style="padding-bottom:14px"><div><h3>Arsip Terbaru</h3><p>5 pendaftaran terakhir</p></div><button class="link" id="btnSeeAll">Lihat semua<i data-lucide="arrow-right"></i></button></div><div class="tbl-scroll"><table style="min-width:900px"><thead><tr><th>Nomor</th><th>Arsip</th><th>Kategori</th><th>Tanggal Dokumen</th><th></th></tr></thead><tbody id="recentBody"></tbody></table></div></div>
       </section>
 
       <section class="view-pane" id="vData">
-        <div class="page-head"><div><div class="crumb">Beranda / Data Arsip</div><h1>Data Arsip</h1></div><button class="btn btn-primary" id="btnNewData"><i data-lucide="plus"></i>Arsip Baru</button></div>
-        <div class="toolbar">
-          <div class="top-search"><i data-lucide="search"></i><input id="q" type="text" placeholder="Cari judul, nomor…"></div>
-          <div class="select"><select id="fCat"></select></div><span style="flex:1"></span>
-          <button class="btn btn-ghost" id="btnRefreshData"><i data-lucide="refresh-cw"></i>Segarkan Data</button>
-        </div>
-        <div class="card tbl-card">
-          <div class="tbl-scroll">
-            <table><thead id="thead"><tr><th>Arsip</th><th class="sortable" data-sort="kategori"><button class="th-in" data-sort="kategori">Kategori<i data-lucide="chevron-down"></i></button></th><th class="sortable" data-sort="tanggal"><button class="th-in" data-sort="tanggal">Tanggal Dokumen<i data-lucide="chevron-down"></i></button></th><th></th></tr></thead><tbody id="tbody"></tbody></table>
-          </div>
-          <div class="tbl-foot"><span class="info" id="countInfo">—</span><div class="pager"><button id="pPrev"><i data-lucide="chevron-left"></i></button><span id="pageInfo">1 / 1</span><button id="pNext"><i data-lucide="chevron-right"></i></button></div></div>
-        </div>
+        <div class="page-head"><div><div class="crumb">Beranda / Data Arsip</div><h1>Data Arsip</h1><p>Kelola seluruh register arsip — nomor dan tanggal harus unik.</p></div><button class="btn btn-primary" id="btnNewData"><i data-lucide="plus"></i>Arsip Baru</button></div>
+        <div class="toolbar"><div class="top-search"><i data-lucide="search"></i><input id="q" type="text" placeholder="Cari nomor, judul, keterangan…" autocomplete="off"></div><div class="select"><select id="fCat" aria-label="Saring kategori"></select></div><span style="flex:1"></span><button class="btn btn-ghost" id="btnRefreshData"><i data-lucide="refresh-cw"></i>Segarkan Data</button></div>
+        <div class="card tbl-card"><div class="tbl-scroll"><table><thead id="thead"><tr><th>Nomor</th><th>Arsip</th><th class="sortable" data-sort="kategori"><button class="th-in" data-sort="kategori">Kategori<i data-lucide="chevron-down"></i></button></th><th class="sortable" data-sort="tanggal"><button class="th-in" data-sort="tanggal">Tanggal Dokumen<i data-lucide="chevron-down"></i></button></th><th></th></tr></thead><tbody id="tbody"></tbody></table></div><div class="tbl-foot"><span class="info" id="countInfo">—</span><div class="pager"><button id="pPrev" aria-label="Sebelumnya"><i data-lucide="chevron-left"></i></button><span id="pageInfo">1 / 1</span><button id="pNext" aria-label="Berikutnya"><i data-lucide="chevron-right"></i></button></div></div></div>
       </section>
 
       <section class="view-pane" id="vSet">
-        <div class="page-head"><div><div class="crumb">Beranda / Pengaturan</div><h1>Pengaturan</h1></div></div>
-        <div class="set-grid">
-          <div class="card"><div class="card-h"><div><h3>Profil</h3></div></div><div class="card-b"><div class="field" style="margin-top:0"><label>Nama Tampilan</label><div class="inwrap plain"><input id="setName" type="text"></div></div><button class="btn btn-primary" id="btnSaveName" style="margin-top:16px"><i data-lucide="check"></i>Simpan Profil</button></div></div>
-          <div class="card"><div class="card-h"><div><h3>Keamanan</h3></div></div><div class="card-b"><div class="field" style="margin-top:0"><label>Kata Sandi Saat Ini</label><div class="inwrap plain"><input id="oldP" type="password"></div></div><div class="f-2"><div class="field"><label>Kata Sandi Baru</label><div class="inwrap plain"><input id="newP" type="password"></div></div><div class="field"><label>Ulangi Sandi</label><div class="inwrap plain"><input id="newP2" type="password"></div></div></div><button class="btn btn-primary" id="btnSavePass" style="margin-top:16px"><i data-lucide="key-round"></i>Ubah Sandi</button></div></div>
-        </div>
+        <div class="page-head"><div><div class="crumb">Beranda / Pengaturan</div><h1>Pengaturan</h1><p>Kelola profil dan keamanan aplikasi.</p></div></div>
+        <div class="set-grid"><div class="card"><div class="card-h"><div><h3>Profil</h3><p>Nama yang ditampilkan di aplikasi</p></div></div><div class="card-b"><div class="field" style="margin-top:0"><label for="setName">Nama Tampilan</label><div class="inwrap plain"><input id="setName" type="text" maxlength="30"></div></div><button class="btn btn-primary" id="btnSaveName" style="margin-top:16px"><i data-lucide="check"></i>Simpan Profil</button></div></div>
+        <div class="card"><div class="card-h"><div><h3>Keamanan</h3><p>Ubah kata sandi akun sendiri</p></div></div><div class="card-b"><div class="field" style="margin-top:0"><label for="oldP">Kata Sandi Saat Ini</label><div class="inwrap plain"><input id="oldP" type="password" placeholder="••••••••"></div></div><div class="f-2"><div class="field"><label for="newP">Kata Sandi Baru</label><div class="inwrap plain"><input id="newP" type="password" placeholder="Min. 6 karakter"></div></div><div class="field"><label for="newP2">Ulangi Kata Sandi</label><div class="inwrap plain"><input id="newP2" type="password" placeholder="Ulangi sandi baru"></div></div></div><button class="btn btn-primary" id="btnSavePass" style="margin-top:16px"><i data-lucide="key-round"></i>Ubah Sandi</button></div></div></div>
+        <div id="adminHint" class="admin-notice hide"><i data-lucide="shield-check"></i><div><b>Mode Admin</b><span>Admin dapat membuka menu Manajemen User dan menghapus arsip. Penghapusan tetap divalidasi di server.</span></div></div>
       </section>
 
-      <!-- ADMIN ONLY: MANAJEMEN PENGGUNA -->
       <section class="view-pane" id="vUsers">
-        <div class="page-head">
-          <div><div class="crumb">Sistem / Pengguna</div><h1>Manajemen Pengguna</h1></div>
-          <button class="btn btn-primary" id="btnNewUser"><i data-lucide="user-plus"></i>Tambah Pengguna</button>
-        </div>
-        <div class="card tbl-card"><div class="tbl-scroll">
-          <table><thead><tr><th>Pengguna</th><th>Username</th><th>Peran</th><th>Aksi</th></tr></thead><tbody id="usersBody"></tbody></table>
-        </div></div>
+        <div class="page-head"><div><div class="crumb">Beranda / Manajemen User</div><h1>Manajemen User</h1><p>Admin dapat membuat user baru dan mengganti kata sandi user.</p></div><button class="btn btn-primary" id="btnNewUser"><i data-lucide="user-plus"></i>User Baru</button></div>
+        <div class="card tbl-card"><div class="card-h" style="padding-bottom:14px"><div><h3>Daftar User</h3><p>Hak akses ditentukan oleh role.</p></div><span class="chip" id="usersCount">0 user</span></div><div class="tbl-scroll"><table><thead><tr><th>User</th><th>Role</th><th>Status</th><th></th></tr></thead><tbody id="usersBody"></tbody></table></div></div>
       </section>
     </main>
   </div>
 </div>
 
-<!-- MODAL FORM ARSIP -->
 <div class="overlay" id="overlay"></div>
-<div class="modal" id="mForm" role="dialog">
-  <div class="m-head"><div><h3 id="formTitle">Arsip Baru</h3></div><button class="m-x" data-close><i data-lucide="x"></i></button></div>
-  <div class="m-body">
-    <form id="arsipForm" novalidate>
-      <div class="field" data-f="nomor"><label for="fNomor">Nomor Arsip</label><div class="inwrap plain"><input id="fNomor" type="text" placeholder="Masukkan nomor dokumen"></div><div class="f-err">Wajib diisi.</div></div>
-      <div class="field" data-f="judul"><label for="fJudul">Judul Dokumen</label><div class="inwrap plain"><input id="fJudul" type="text" maxlength="120"></div><div class="f-err">Wajib diisi.</div></div>
-      <div class="f-2">
-        <div class="field"><label for="fKategori">Kategori</label><div class="inwrap plain"><select class="sel" id="fKategori"></select></div></div>
-        <div class="field" data-f="tanggal"><label for="fTanggal">Tanggal Dokumen</label><div class="inwrap plain"><input id="fTanggal" type="date"></div><div class="f-err">Wajib diisi.</div></div>
-      </div>
-      <div class="field"><label for="fKet">Keterangan</label><textarea class="ta" id="fKet"></textarea></div>
-      <div class="field"><label for="fFile">Lampiran File</label><div class="inwrap plain"><input id="fFile" type="file"></div></div>
-      <button type="submit" hidden></button>
-    </form>
-  </div>
-  <div class="m-foot"><button class="btn btn-ghost" data-close>Batal</button><button class="btn btn-primary" id="btnSave"><i data-lucide="save"></i>Simpan</button></div>
-</div>
+<div class="modal" id="mForm" role="dialog" aria-modal="true"><div class="m-head"><div><h3 id="formTitle">Arsip Baru</h3><p id="formSub">Lengkapi data dokumen untuk didaftarkan.</p></div><button class="m-x" data-close aria-label="Tutup"><i data-lucide="x"></i></button></div><div class="m-body"><form id="arsipForm" novalidate><div class="field" data-f="nomor"><label for="fNomor">Nomor Arsip</label><div class="inwrap plain"><input id="fNomor" type="text" maxlength="120" placeholder="cth. 001/REN/KPU-BS/2026"></div><div class="hint">Nomor yang sama pada tanggal yang sama akan ditolak.</div><div class="f-err">Nomor arsip wajib diisi.</div></div><div class="field" data-f="judul"><label for="fJudul">Judul Dokumen</label><div class="inwrap plain"><input id="fJudul" type="text" maxlength="120" placeholder="cth. Surat Undangan Rapat"></div><div class="f-err">Judul dokumen wajib diisi.</div></div><div class="f-2"><div class="field"><label for="fKategori">Kategori</label><div class="inwrap plain"><select class="sel" id="fKategori"></select></div></div><div class="field" data-f="tanggal"><label for="fTanggal">Tanggal Dokumen</label><div class="inwrap plain"><input id="fTanggal" type="date"></div><div class="f-err">Tanggal wajib diisi.</div></div></div><div class="field"><label for="fKet">Keterangan</label><textarea class="ta" id="fKet" maxlength="240" placeholder="Catatan singkat mengenai dokumen (opsional)…"></textarea></div><div class="field"><label for="fFile">Lampiran Dokumen <span class="muted-label">(opsional, maks. 15 MB)</span></label><div class="inwrap plain"><input id="fFile" type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx,.xls,.xlsx,.ppt,.pptx"></div><div class="hint" id="currentFile">Belum ada lampiran.</div></div><button type="submit" hidden></button></form></div><div class="m-foot"><button class="btn btn-ghost" data-close>Batal</button><button class="btn btn-primary" id="btnSave"><i data-lucide="save"></i><span id="btnSaveTxt">Simpan Arsip</span></button></div></div>
 
-<div class="modal" id="mDetail" role="dialog">
-  <div class="m-head"><div><h3>Detail Arsip</h3></div><button class="m-x" data-close><i data-lucide="x"></i></button></div>
-  <div class="m-body"><div class="d-top"><span class="avatar av" id="dAva"></span><div style="min-width:0"><div class="d-title" id="dJudul"></div></div></div><dl class="d-grid"><div><dt>Nomor Arsip</dt><dd id="dNomor"></dd></div><div><dt>Kategori</dt><dd id="dKategori"></dd></div><div><dt>Tanggal</dt><dd id="dTanggal"></dd></div><div class="full"><dt>Keterangan</dt><dd id="dKet"></dd></div><div class="full" id="dFileWrapper"><dt>Lampiran</dt><dd id="dFileLink"></dd></div></dl></div>
-  <div class="m-foot"><button class="btn btn-ghost" id="dDel" style="margin-right:auto;color:var(--red)"><i data-lucide="trash-2"></i>Hapus</button><button class="btn btn-ghost" data-close>Tutup</button><button class="btn btn-primary" id="dEdit"><i data-lucide="pencil"></i>Ubah</button></div>
-</div>
+<div class="modal" id="mDetail" role="dialog" aria-modal="true"><div class="m-head"><div><h3>Detail Arsip</h3><p>Lembar data lengkap catatan register.</p></div><button class="m-x" data-close aria-label="Tutup"><i data-lucide="x"></i></button></div><div class="m-body"><div class="d-top"><span class="avatar av" id="dAva">AR</span><div style="min-width:0"><div class="d-title" id="dJudul">—</div><div class="d-sub-number mono" id="dNomor">—</div></div></div><dl class="d-grid"><div><dt>Nomor Arsip</dt><dd id="dNomor2">—</dd></div><div><dt>Kategori</dt><dd id="dKategori">—</dd></div><div><dt>Tanggal Dokumen</dt><dd id="dTanggal">—</dd></div><div><dt>Didaftarkan</dt><dd id="dDaftar">—</dd></div><div class="full"><dt>Keterangan</dt><dd id="dKet">—</dd></div><div class="full" id="dFileWrapper" style="display:none"><dt>Lampiran File</dt><dd id="dFileLink">—</dd></div></dl></div><div class="m-foot"><button class="btn btn-ghost hide" id="dDel" style="margin-right:auto;color:var(--red);border-color:var(--red-bg)"><i data-lucide="trash-2"></i>Hapus</button><button class="btn btn-ghost" data-close>Tutup</button><button class="btn btn-primary" id="dEdit"><i data-lucide="pencil"></i>Ubah</button></div></div>
 
-<div class="modal modal-lg" id="mPreview" role="dialog"><div class="m-head"><div><h3 id="pvTitle">Pratinjau</h3></div><button class="m-x" data-close><i data-lucide="x"></i></button></div><div class="m-body pv-body"><iframe id="pvFrame" class="preview-frame"></iframe><div class="pv-fallback" id="pvFallback" style="display:none"><i data-lucide="file-x"></i><p>Buka di tab baru.</p></div></div><div class="m-foot"><button class="btn btn-ghost" data-close>Tutup</button><a class="btn btn-primary" id="pvOpenTab" href="#" target="_blank"><i data-lucide="external-link"></i>Buka Tab Baru</a></div></div>
-<div class="modal" id="mConfirm" role="dialog" style="width:min(460px,calc(100vw - 32px))"><div class="m-head"><div><h3>Hapus?</h3></div><button class="m-x" data-close><i data-lucide="x"></i></button></div><div class="m-body"><div class="warn"><i data-lucide="triangle-alert"></i><p>Catatan dihapus permanen.</p></div><div class="target"><span class="avatar av" id="cAva"></span><div><b id="cJudul"></b></div></div></div><div class="m-foot"><button class="btn btn-ghost" data-close>Batal</button><button class="btn btn-danger" id="cYes"><i data-lucide="trash-2"></i>Ya, Hapus</button></div></div>
-<div class="modal" id="mNotif" role="dialog" style="width:min(420px,calc(100vw - 32px))"><div class="m-head"><div><h3>Notifikasi</h3></div><button class="m-x" data-close><i data-lucide="x"></i></button></div><div class="m-body" id="notifBody"></div></div>
+<div class="modal modal-lg" id="mPreview" role="dialog" aria-modal="true"><div class="m-head"><div><h3 id="pvTitle">Pratinjau File</h3><p>Pratinjau lampiran arsip.</p></div><button class="m-x" data-close aria-label="Tutup"><i data-lucide="x"></i></button></div><div class="m-body pv-body"><div class="pv-loading" id="pvLoading"><i data-lucide="loader-circle" class="spin"></i><span>Menyiapkan pratinjau…</span></div><iframe id="pvFrame" class="preview-frame" title="Pratinjau File" allow="autoplay" style="display:none"></iframe><div class="pv-fallback" id="pvFallback" style="display:none"><i data-lucide="file-x"></i><p id="pvError">Pratinjau tidak tersedia untuk file ini.</p></div></div><div class="m-foot"><button class="btn btn-ghost" data-close>Tutup</button><a class="btn btn-primary" id="pvOpenTab" href="#" target="_blank" rel="noopener"><i data-lucide="external-link"></i>Buka di Tab Baru</a></div></div>
 
-<!-- MODAL DUPLIKAT ALERT -->
-<div class="modal" id="mAlert" role="dialog" style="width:min(400px,calc(100vw - 32px))">
-  <div class="m-head"><div><h3 style="color:var(--red)">Pendaftaran Ditolak</h3></div><button class="m-x" data-close><i data-lucide="x"></i></button></div>
-  <div class="m-body"><p>Sistem mendeteksi <b>Nomor Arsip</b> pada <b>Tanggal</b> tersebut sudah terdaftar. Tidak dapat diduplikasi.</p></div>
-  <div class="m-foot"><button class="btn btn-ghost" data-close>Mengerti</button></div>
-</div>
+<div class="modal" id="mConfirm" role="dialog" aria-modal="true"><div class="m-head"><div><h3>Hapus Arsip?</h3><p>Tindakan ini bersifat permanen.</p></div><button class="m-x" data-close aria-label="Tutup"><i data-lucide="x"></i></button></div><div class="m-body"><div class="warn"><i data-lucide="triangle-alert"></i><p>Catatan akan dihapus permanen dari register dan file lampiran terkait.</p></div><div class="target"><span class="avatar av" id="cAva" style="width:38px;height:38px;border-radius:10px">AR</span><div style="min-width:0"><b class="mono" id="cNomor">—</b><b style="font-size:13.5px;display:block" id="cJudul">—</b></div></div></div><div class="m-foot"><button class="btn btn-ghost" data-close>Batal</button><button class="btn btn-danger" id="cYes"><i data-lucide="trash-2"></i>Ya, Hapus</button></div></div>
 
-<!-- MODAL TAMBAH USER -->
-<div class="modal" id="mUserForm" role="dialog">
-  <div class="m-head"><div><h3>Pengguna Baru</h3></div><button class="m-x" data-close><i data-lucide="x"></i></button></div>
-  <div class="m-body">
-    <div class="field"><label>Nama Tampilan</label><div class="inwrap plain"><input id="uNama" type="text"></div></div>
-    <div class="field"><label>Username</label><div class="inwrap plain"><input id="uUser" type="text"></div></div>
-    <div class="f-2">
-      <div class="field"><label>Kata Sandi</label><div class="inwrap plain"><input id="uPass" type="password"></div></div>
-      <div class="field"><label>Peran</label><div class="inwrap plain"><select class="sel" id="uRole"><option value="user">User</option><option value="admin">Admin</option></select></div></div>
-    </div>
-  </div>
-  <div class="m-foot"><button class="btn btn-ghost" data-close>Batal</button><button class="btn btn-primary" id="btnSaveUser">Simpan Pengguna</button></div>
-</div>
+<div class="modal" id="mDuplicate" role="dialog" aria-modal="true"><div class="m-head"><div><h3>Nomor Arsip Sudah Terdaftar</h3><p>Data tidak dapat disimpan.</p></div><button class="m-x" data-close aria-label="Tutup"><i data-lucide="x"></i></button></div><div class="m-body"><div class="warn"><i data-lucide="copy-check"></i><p id="dupMessage">Nomor dan tanggal tersebut sudah terdaftar.</p></div><div class="duplicate-tip"><i data-lucide="lightbulb"></i><span>Gunakan nomor berbeda atau pilih tanggal dokumen yang sesuai.</span></div></div><div class="m-foot"><button class="btn btn-primary" data-close>Periksa Lagi</button></div></div>
+
+<div class="modal" id="mNotif" role="dialog" aria-modal="true"><div class="m-head"><div><h3>Notifikasi</h3><p>Informasi sistem arsip.</p></div><button class="m-x" data-close aria-label="Tutup"><i data-lucide="x"></i></button></div><div class="m-body" id="notifBody"></div></div>
+
+<div class="modal" id="mUserForm" role="dialog" aria-modal="true"><div class="m-head"><div><h3>User Baru</h3><p>Admin dapat membuat akun user atau admin.</p></div><button class="m-x" data-close aria-label="Tutup"><i data-lucide="x"></i></button></div><div class="m-body"><form id="userForm"><div class="field" style="margin-top:0"><label for="ufUsername">Username</label><div class="inwrap plain"><input id="ufUsername" type="text" maxlength="80" placeholder="contoh: petugas1" autocomplete="off"></div></div><div class="field"><label for="ufName">Nama</label><div class="inwrap plain"><input id="ufName" type="text" maxlength="80" placeholder="Nama lengkap"></div></div><div class="field"><label for="ufRole">Role</label><div class="inwrap plain"><select id="ufRole"><option value="user">User</option><option value="admin">Admin</option></select></div></div><div class="field"><label for="ufPassword">Kata Sandi</label><div class="inwrap plain"><input id="ufPassword" type="password" minlength="6" maxlength="128" placeholder="Min. 6 karakter" autocomplete="new-password"></div></div></form></div><div class="m-foot"><button class="btn btn-ghost" data-close>Batal</button><button class="btn btn-primary" id="btnCreateUser" type="submit" form="userForm">Buat User</button></div></div>
+
+<div class="modal" id="mResetPass" role="dialog" aria-modal="true"><div class="m-head"><div><h3>Reset Password User</h3><p id="resetUserLabel">@user</p></div><button class="m-x" data-close aria-label="Tutup"><i data-lucide="x"></i></button></div><div class="m-body"><form id="resetForm"><div class="field" style="margin-top:0"><label for="rpPassword">Kata Sandi Baru</label><div class="inwrap plain"><input id="rpPassword" type="password" minlength="6" maxlength="128" placeholder="Min. 6 karakter" autocomplete="new-password"></div></div><div class="field"><label for="rpPassword2">Ulangi Kata Sandi Baru</label><div class="inwrap plain"><input id="rpPassword2" type="password" minlength="6" maxlength="128" placeholder="Ulangi sandi baru" autocomplete="new-password"></div></div></form></div><div class="m-foot"><button class="btn btn-ghost" data-close>Batal</button><button class="btn btn-primary" id="btnResetPass" type="submit" form="resetForm">Simpan Password</button></div></div>
 
 <div class="toasts" id="toasts"></div>
 <script src="app.js"></script>
