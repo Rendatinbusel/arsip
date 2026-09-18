@@ -10,8 +10,24 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lucide@0.462.0/dist/umd/lucide.min.js"></script>
 <link rel="stylesheet" href="style.css">
+<script>
+(function(){
+  try {
+    if (localStorage.getItem('arsipku.sesi.v3') || sessionStorage.getItem('arsipku.sesi.v3') || sessionStorage.getItem('arsipku.sesi.v2')) {
+      document.documentElement.classList.add('has-session');
+    }
+  } catch(e) {}
+})();
+</script>
 </head>
 <body>
+<div id="sessionBoot" aria-live="polite" aria-label="Memulihkan sesi">
+  <div class="session-boot-card">
+    <div class="session-boot-logo"><img src="https://www.kpu.go.id/images/1627539868logo-kpu.png" alt="Logo KPU"></div>
+    <div class="session-boot-title">Arsip Rendatin</div>
+    <div class="session-boot-sub"><span class="session-boot-spinner"></span> Memulihkan sesi…</div>
+  </div>
+</div>
 <div id="viewLogin">
   <div class="l-card">
     <div class="l-logo"><div class="mark"><img src="https://www.kpu.go.id/images/1627539868logo-kpu.png" alt="Logo KPU"></div><div><b>Arsip Rendatin</b><span>KPU Buton Selatan</span></div></div>
