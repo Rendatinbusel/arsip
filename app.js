@@ -9,6 +9,7 @@
 const API_URL = 'https://gobgpaouqymsnleauiim.supabase.co/functions/v1/api';
 const SUPABASE_KEY = 'sb_publishable_V__Lj9OuydfsBjt7kUeR8g_ndmz2CFD';
 const SESSION_KEY = 'arsipku.sesi.v3';
+const LEGACY_SESSION_KEY = 'arsipku.sesi.v2';
 const CATS = ['Surat Masuk', 'Surat Keluar', 'SK dan BA', 'Perencanaan'];
 const ROLES = ['user', 'admin'];
 const PER_PAGE = 8;
@@ -41,11 +42,32 @@ let dataLoaded = false;
 const state = { view:'dash', query:'', cat:'semua', year:'semua', sortKey:'createdAt', sortDir:'desc', page:1, editingId:null, detailId:null, confirmId:null, resetUsername:null, justAdded:null };
 
 function saveSession(token, user) {
-  sessionStorage.setItem(SESSION_KEY, JSON.stringify({ token, user }));
+  const payload = JSON.stringify({ token, user });
+  // Persist di localStorage agar reload halaman tetap mempertahankan login.
+  localStorage.setItem(SESSION_KEY, payload);
+  sessionStorage.setItem(SESSION_KEY, payload);
   profil = { name:user.name || user.username, username:user.username, role:user.role === 'admin' ? 'admin' : 'user' };
 }
-function readSession(){ try { return JSON.parse(sessionStorage.getItem(SESSION_KEY) || 'null'); } catch { return null; } }
-function clearSession(){ sessionStorage.removeItem(SESSION_KEY); profil = {name:'Memuat...',username:'',role:'user'}; }
+function readSession(){
+  try {
+    const stored = localStorage.getItem(SESSION_KEY);
+    if (stored) return JSON.parse(stored);
+    // Migrasi otomatis dari sesi versi lama bila masih ada.
+    const legacy = sessionStorage.getItem(SESSION_KEY) || sessionStorage.getItem(LEGACY_SESSION_KEY);
+    if (legacy) {
+      localStorage.setItem(SESSION_KEY, legacy);
+      sessionStorage.setItem(SESSION_KEY, legacy);
+      return JSON.parse(legacy);
+    }
+  } catch {}
+  return null;
+}
+function clearSession(){
+  localStorage.removeItem(SESSION_KEY);
+  sessionStorage.removeItem(SESSION_KEY);
+  sessionStorage.removeItem(LEGACY_SESSION_KEY);
+  profil = {name:'Memuat...',username:'',role:'user'};
+}
 function sessionToken(){ return readSession()?.token || ''; }
 
 async function fetchAPI(action, payload = {}) {
