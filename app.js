@@ -295,10 +295,15 @@ function renderAll(){populateYearFilter();renderStats();renderActivity();renderC
   $('#dashDate').textContent = fmtLongDate(new Date());
   icons();
 
-  // Perilaku reload yang diminta:
-  // halaman login tetap terlihat lebih dulu. Jika session masih valid,
-  // browser otomatis berpindah ke dashboard setelah validasi server selesai.
+  // Perilaku reload yang diperbaiki:
+  // #viewBoot (layar loading polos) tampil lebih dulu di HTML, sedangkan
+  // #viewLogin dan #viewApp sama-sama disembunyikan. Baru setelah verifikasi
+  // sesi ke server selesai, kita putuskan mau menampilkan dashboard atau
+  // form login — sehingga tidak ada lagi "kedipan" halaman login sebelum
+  // otomatis berpindah ke dashboard.
   const ok = await restoreSession();
+  $('#viewBoot')?.classList.add('hide');
+
   if (ok) {
     await enterApp();
   } else {

@@ -12,7 +12,17 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div id="viewLogin">
+<!-- Layar loading awal: tampil sebentar saat aplikasi memverifikasi sesi ke server,
+     sebelum memutuskan akan menampilkan halaman login atau langsung ke dashboard.
+     Ini mencegah "kedipan" halaman login yang sempat terlihat lalu berpindah otomatis. -->
+<div id="viewBoot" style="min-height:100vh;display:grid;place-items:center;background:var(--bg)">
+  <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+    <i data-lucide="loader-circle" class="spin" style="width:30px;height:30px;color:var(--primary)"></i>
+    <span style="font-size:13px;color:var(--muted);font-weight:500">Memuat sesi…</span>
+  </div>
+</div>
+
+<div id="viewLogin" class="hide">
   <div class="l-card">
     <div class="l-logo"><div class="mark"><img src="https://www.kpu.go.id/images/1627539868logo-kpu.png" alt="Logo KPU"></div><div><b>Arsip Rendatin</b><span>KPU Buton Selatan</span></div></div>
     <h2>Portal Arsip Rendatin</h2><p class="sub">Silakan masuk untuk mengelola arsip.</p>
