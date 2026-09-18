@@ -91,7 +91,7 @@ async function fetchAPI(action, payload = {}) {
 
 function handleSessionExpired(){
   clearSession();
-  document.documentElement.classList.remove('has-session','session-ready');
+  
   data = []; users = []; dataLoaded = false;
   closeModals();
   $('#viewApp').classList.add('hide'); $('#viewLogin').classList.remove('hide');
@@ -129,8 +129,8 @@ $('#loginForm').addEventListener('submit',async e=>{
   const result=await fetchAPI('login',{username:u,password:p});
   btn.disabled=false; btn.innerHTML='<i data-lucide="log-in"></i> Masuk'; icons();
   if(result.success){
-    document.documentElement.classList.remove('has-session');
-    document.documentElement.classList.add('session-ready');
+    
+    
     saveSession(result.token,result.user); data=result.data||[]; dataLoaded=true;
     $('#loginErr').classList.remove('show'); $('#loginPass').value=''; enterApp();
     toast(`Selamat datang, ${profil.name}.`,'ok');
@@ -140,7 +140,7 @@ $('#loginForm').addEventListener('submit',async e=>{
   }
 });
 
-async function logout(){ await fetchAPI('logout'); clearSession(); document.documentElement.classList.remove('has-session','session-ready'); data=[]; users=[]; dataLoaded=false; $('#viewApp').classList.add('hide'); $('#viewLogin').classList.remove('hide'); $('#loginPass').value=''; $('#loginErr').classList.remove('show'); toast('Anda telah keluar dari sistem.','info'); }
+async function logout(){ await fetchAPI('logout'); clearSession();  data=[]; users=[]; dataLoaded=false; $('#viewApp').classList.add('hide'); $('#viewLogin').classList.remove('hide'); $('#loginPass').value=''; $('#loginErr').classList.remove('show'); toast('Anda telah keluar dari sistem.','info'); }
 $('#btnLogout').addEventListener('click',logout); $('#menuLogout').addEventListener('click',logout);
 
 async function enterApp(){
@@ -292,17 +292,16 @@ $('#btnNotif').addEventListener('click',()=>{renderNotif();openModal('#mNotif');
 function renderAll(){populateYearFilter();renderStats();renderActivity();renderCats();renderRecent();renderTable();}
 
 (async function init(){
-  $('#dashDate').textContent=fmtLongDate(new Date());
+  $('#dashDate').textContent = fmtLongDate(new Date());
   icons();
+
+  // Perilaku reload yang diminta:
+  // halaman login tetap terlihat lebih dulu. Jika session masih valid,
+  // browser otomatis berpindah ke dashboard setelah validasi server selesai.
   const ok = await restoreSession();
-  if(ok){
-    // Jangan tampilkan login selama sesi diverifikasi/di-load.
-    // Dashboard ditampilkan dulu setelah data siap, lalu boot screen dilepas.
+  if (ok) {
     await enterApp();
-    document.documentElement.classList.add('session-ready');
-    document.documentElement.classList.remove('has-session');
-  }else{
-    document.documentElement.classList.remove('has-session','session-ready');
+  } else {
     $('#viewLogin').classList.remove('hide');
     $('#viewApp').classList.add('hide');
   }
